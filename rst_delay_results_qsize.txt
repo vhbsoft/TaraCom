@@ -1,0 +1,2 @@
+Entropy	qsize	RST_Delay_Difference(s)
+l	1000	0.904916
