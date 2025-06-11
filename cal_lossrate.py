@@ -1,3 +1,19 @@
+# =========================================
+# Script Name: cal_lossrate.py
+#
+# Summary:
+#     Calculates packet loss rate based on received packet logs.
+#     Typically used after running ns-3 simulation and extracting SYN packets.
+#
+# Input File: SYN packet log (e.g., multiSYN_output_loss_rate_l.txt)
+# Output File: CSV-style summary (e.g., multi_syn_output.txt)
+# Invoked by: simu_comp_multi_syn.sh
+# Example:
+#     python cal_lossrate.py multiSYN_output_loss_rate_l.txt 40 25 2 l multi_syn_output.txt
+# Input Files: input_file
+# Output Files: output_file
+# =========================================
+
 import sys
 import csv
 import os

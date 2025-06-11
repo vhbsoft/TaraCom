@@ -1,3 +1,26 @@
+# =========================================
+# Script Name: getDelay.py
+#
+# Summary:
+#     This script parses a .pcap file to measure the delay between the first
+#     two TCP RST packets (often used to signal the end of a simulation).
+#     It computes ΔT (delay in seconds) and appends the result to a delay output file.
+#
+# Input File: compression_link_<entropy>-3-0.pcap
+# Output File: output/delay_<entropy>_<packet_number>_<simu>
+#
+# Usage:
+#     python getDelay.py l 40 qos
+#         - 'l' = low entropy
+#         - 40 = number of packets
+#         - qos = simulation label
+#
+# Output:
+#     delay_<entropy>_<packet_number>_<simu>: contains the delay in seconds
+#
+# Called by: simu_traffic_shaper.sh
+# =========================================
+
 import sys
 import pyshark
 

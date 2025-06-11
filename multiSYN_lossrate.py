@@ -1,3 +1,18 @@
+# =========================================
+# Script Name: multiSYN_lossrate.py
+#
+# Summary:
+#     Extracts TCP SYN packets from a .pcap file, filtering by entropy and port.
+#     Saves timestamped log to a .txt file for loss rate analysis.
+#
+# Input File: pcap trace (e.g., compression_link_l-3-0.pcap)
+# Output File: SYN packet log (e.g., multiSYN_output_loss_rate_l.txt)
+# Invoked by: simu_comp_multi_syn.sh
+# Example:
+#     python multiSYN_lossrate.py l 10000
+# Output Files: output_txt
+# =========================================
+
 import pyshark
 import sys
 import os

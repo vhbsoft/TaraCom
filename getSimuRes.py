@@ -1,3 +1,23 @@
+# =========================================
+# Script Name: getSimuRes.py
+#
+# Summary:
+#     This script calculates the percentage of lines in compression_link_output
+#     where the second field is -1 (indicating a failed packet).
+#     It writes this loss percentage along with arguments p, n, and capacity to a results file.
+#     It also saves a copy of compression_link_output with a unique name under ./output/.
+#
+# Input File: compression_link_output
+# Output Files:
+#     - <arg1>: summary result file, appended with p,n,capacity and loss
+#     - ./output/<arg1>_output_<p>_<n>_<capacity>: full copy of original output
+#
+# Usage:
+#     python getSimuRes.py result.txt 40 25 3
+#
+# Called by: simu_comp_link_capacity.sh
+# =========================================
+
 import sys
 
 # Get the arguments from the command line

@@ -1,3 +1,17 @@
+# =========================================
+# Script Name: getSuperPacket.py
+#
+# Summary:
+#     Aggregates simulation results into superpackets based on timing or structure.
+#     Intermediate step before loss rate calculation.
+#
+# Input File: pcap or intermediate output
+# Output File: superpacket_output
+# Invoked by: simu_traffic_shaper.sh
+# Input Files: compression_link_output
+# Output Files: superpacket_output
+# =========================================
+
 import sys
 
 # Get the arguments from the command line
