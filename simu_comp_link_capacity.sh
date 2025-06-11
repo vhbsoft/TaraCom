@@ -1,3 +1,24 @@
+# =========================================
+# Script Name: simu_comp_link_capacity.sh
+#
+# Summary:
+#     This script varies the compression link capacity (0.5–10 Mbps) to examine its impact on reset delay.
+#     For each capacity and entropy setting ("l", "h"), it:
+#       1. Runs the ns-3 compression-exp simulation with fixed payload and packet number.
+#       2. Calls getDelay.py to extract TCP RST timestamps and calculate delay.
+#       3. Appends the delay value to rst_delay_results_link.txt.
+#
+# Input Parameters:
+#     - Link capacity: 0.5, 1, ..., 10 (Mbps)
+#     - Entropy: l (low) or h (high)
+#
+# Output File:
+#     - rst_delay_results_link.txt (CSV-style delay per capacity/entropy combo)
+#
+# Dependencies:
+#     - ns3
+#     - getDelay.py
+# =========================================
 
 #!/bin/bash
 outputFile="rst_delay_results_link.txt" # set the destination file

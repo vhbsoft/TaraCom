@@ -1,3 +1,23 @@
+# =========================================
+# Script Name: simu_packet_number.sh
+#
+# Summary:
+#     This script explores how varying the total number of packets affects delay.
+#     For each (packet number, entropy) combination:
+#       1. Runs the ns-3 compression-exp simulation.
+#       2. Runs getDelay.py to calculate TCP RST delay.
+#
+# Input Parameters:
+#     - Packet numbers: 250–3000
+#     - Entropy: l, h
+#
+# Output File:
+#     - rst_delay_results_packetNum.txt
+#
+# Dependencies:
+#     - ns3
+#     - getDelay.py
+# =========================================
 
 #!/bin/bash
 

@@ -1,3 +1,23 @@
+# =========================================
+# Script Name: simu_queue_size.sh
+#
+# Summary:
+#     This script evaluates how queue size impacts TCP RST delay.
+#     For each queue size:
+#       1. Runs the ns-3 simulation with fixed parameters.
+#       2. Uses getDelay.py to compute and store delay.
+#
+# Input Parameters:
+#     - Queue size: 1000 (or more, commented)
+#     - Entropy: l
+#
+# Output File:
+#     - rst_delay_results_qsize.txt
+#
+# Dependencies:
+#     - ns3
+#     - getDelay.py
+# =========================================
 
 #!/bin/bash
 outputFile="rst_delay_results_qsize.txt" # set the destination file

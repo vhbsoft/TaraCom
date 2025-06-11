@@ -1,3 +1,24 @@
+# =========================================
+# Script Name: simu_payload.sh
+#
+# Summary:
+#     This script analyzes how payload size affects performance (e.g., loss rate).
+#     For each payload, entropy, and queueSize:
+#       1. Runs ns-3 simulation.
+#       2. Calculates loss via getSimuRes.py and appends result.
+#
+# Input Parameters:
+#     - Payload: 50–1100 bytes
+#     - Entropy: l, h
+#     - Queue size: 1, 60
+#
+# Output File:
+#     - packet_size
+#
+# Dependencies:
+#     - ns3
+#     - getSimuRes.py
+# =========================================
 
 #!/bin/bash
 

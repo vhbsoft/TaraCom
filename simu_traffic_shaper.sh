@@ -1,3 +1,26 @@
+# =========================================
+# Script Name: simu_traffic_shaper.sh
+#
+# Summary:
+#     This script automates a 2D experiment:
+#       For link capacities 1–10 Mbps and 6 values of shaping parameter λ,
+#       it:
+#         1. Runs an ns-3 simulation.
+#         2. Applies getSuperPacket.py with λ to extract result.
+#         3. Uses countSpLossRate.py to compute loss rate and append to CSV.
+#
+# Input Parameters:
+#     - Link capacity: 1–10 Mbps
+#     - Lambda: 1–6
+#
+# Output File:
+#     - lossrate_output (CSV format: capacity, loss for λ=1~6)
+#
+# Dependencies:
+#     - ns3
+#     - getSuperPacket.py
+#     - countSpLossRate.py
+# =========================================
 
 #!/bin/bash
 lossRateFile="lossrate_output" # set the destination file

@@ -1,3 +1,27 @@
+# =========================================
+# Script Name: simu_comp_multi_syn.sh
+#
+# Summary:
+#     This script tests multiple (p, n) input combinations using SYN and UDP packets.
+#     For each entropy setting ("l", "h"), it:
+#       1. Runs ns-3 simulation with specific p, n values.
+#       2. Uses multiSYN_lossrate.py to extract SYN packet log.
+#       3. Runs cal_lossrate.py to compute and append loss rate.
+#
+# Input Parameters:
+#     - Entropy: l or h
+#     - (p, n): defined statically in 'pairs'
+#     - Capacity: fixed at 2 Mbps
+#
+# Output File:
+#     - multi_syn_output.txt (appended with loss rates per setting)
+#
+# Dependencies:
+#     - ns3
+#     - multiSYN_lossrate.py
+#     - cal_lossrate.py
+# =========================================
+
 p=200
 n=10
 capacity=2
