@@ -21,8 +21,8 @@
 # Called by: simu_traffic_shaper.sh
 # =========================================
 
+import subprocess
 import sys
-import pyshark
 
 # Get command-line arguments
 if len(sys.argv) < 4:
@@ -36,21 +36,13 @@ simu = sys.argv[3]  # Simulation type
 # Construct PCAP filename
 pcap_file = "compression_link_{}-3-0.pcap".format(entropy)
 
-# Read PCAP file and filter for RST packets
-cap = pyshark.FileCapture(pcap_file, display_filter="tcp.flags.reset == 1")
-
-rst_times = []
-
-# Extract timestamps
-for packet in cap:
-    timestamp = float(packet.sniff_time.timestamp())
-    rst_times.append(timestamp)
-
-    # Stop capturing after finding the first two RST packets
-    if len(rst_times) == 2:
-        break
-
-cap.close()
+capture = subprocess.run(
+    ["tshark", "-r", pcap_file, "-Y", "tcp.flags.reset == 1", "-T", "fields", "-e", "frame.time_epoch"],
+    check=True,
+    capture_output=True,
+    text=True,
+)
+rst_times = [float(line) for line in capture.stdout.splitlines()[:2]]
 
 # Ensure at least 2 RST packets (ignore extra ones)
 if len(rst_times) < 2:
