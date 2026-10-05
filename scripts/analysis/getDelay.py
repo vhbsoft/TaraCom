@@ -6,8 +6,8 @@
 #     two TCP RST packets (often used to signal the end of a simulation).
 #     It computes ΔT (delay in seconds) and appends the result to a delay output file.
 #
-# Input File: compression_link_<entropy>-3-0.pcap
-# Output File: output/delay_<entropy>_<packet_number>_<simu>
+# Input File: pcap/compression_link_<entropy>-3-0.pcap
+# Output File: rst_delay_results_<simu>.txt
 #
 # Usage:
 #     python getDelay.py l 40 qos
@@ -34,7 +34,7 @@ packet_number = sys.argv[2]  # Packet number
 simu = sys.argv[3]  # Simulation type
 
 # Construct PCAP filename
-pcap_file = "compression_link_{}-3-0.pcap".format(entropy)
+pcap_file = "pcap/compression_link_{}-3-0.pcap".format(entropy)
 
 capture = subprocess.run(
     ["tshark", "-r", pcap_file, "-Y", "tcp.flags.reset == 1", "-T", "fields", "-e", "frame.time_epoch"],

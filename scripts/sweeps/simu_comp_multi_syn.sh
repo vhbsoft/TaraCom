@@ -1,3 +1,4 @@
+#!/bin/bash
 # =========================================
 # Script Name: simu_comp_multi_syn.sh
 #
@@ -13,14 +14,17 @@
 #     - (p, n): defined statically in 'pairs'
 #     - Capacity: fixed at 2 Mbps
 #
-# Output File:
+# Output File (in results/multi_syn/):
 #     - multi_syn_output.txt (appended with loss rates per setting)
 #
 # Dependencies:
-#     - ns3
+#     - ns3 (via common.sh)
 #     - multiSYN_lossrate.py
 #     - cal_lossrate.py
 # =========================================
+
+source "$(dirname -- "${BASH_SOURCE[0]}")/common.sh"
+enter_run_dir multi_syn
 
 p=200
 n=10
@@ -41,9 +45,9 @@ for entropy in l h; do
 
             echo "Running with entropy=$entropy, capacity=$capacity, p=$p, n=$n"
 
-            ./ns3 run compression-multi-syn -- --filename=myconfig.txt --compLinkCap=${capacity}Mbps --payload=1100 --entropy=$entropy --p=$p --n=$n
-            python3 multiSYN_lossrate.py $entropy
-            python3 cal_lossrate.py multiSYN_output_loss_rate_$entropy.txt $p $n $capacity $entropy multi_syn_output.txt
+            run_sim compression-multi-syn --compLinkCap=${capacity}Mbps --payload=1100 --entropy=$entropy --p=$p --n=$n
+            python3 "$analysis/multiSYN_lossrate.py" $entropy
+            python3 "$analysis/cal_lossrate.py" multiSYN_output_loss_rate_$entropy.txt $p $n $capacity $entropy multi_syn_output.txt
         done
     done
 done

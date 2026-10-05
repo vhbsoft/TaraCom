@@ -1,3 +1,4 @@
+#!/bin/bash
 # =========================================
 # Script Name: simu_payload.sh
 #
@@ -12,15 +13,17 @@
 #     - Entropy: l, h
 #     - Queue size: 1, 60
 #
-# Output File:
+# Output File (in results/payload/):
 #     - packet_size
 #
 # Dependencies:
-#     - ns3
+#     - ns3 (via common.sh)
 #     - getSimuRes.py
 # =========================================
 
-#!/bin/bash
+source "$(dirname -- "${BASH_SOURCE[0]}")/common.sh"
+enter_run_dir payload
+
 
 outputFile="packet_size" # set the destination file
 > $outputFile # clean the destination file
@@ -28,9 +31,9 @@ outputFile="packet_size" # set the destination file
 for payload in 50 100 500 600 700 800 900 1000 1100; do
   for entropy in l h; do
     for queueSize in 1 60; do
-      ./ns3 run compression-exp -- --filename=myconfig.txt --packetNumber=10000 --compLinkCap=2Mbps --payload=$payload --entropy=$entropy --queueSize=$queueSize
+      run_sim compression-exp --packetNumber=10000 --compLinkCap=2Mbps --payload=$payload --entropy=$entropy --queueSize=$queueSize
       # get the results
-      python3 getSimuRes.py $outputFile $entropy $payload $queueSize
+      python3 "$analysis/getSimuRes.py" $outputFile $entropy $payload $queueSize
     done
   done
 done

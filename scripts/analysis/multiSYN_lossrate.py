@@ -5,7 +5,7 @@
 #     Extracts TCP SYN packets from a .pcap file, filtering by entropy and port.
 #     Saves timestamped log to a .txt file for loss rate analysis.
 #
-# Input File: pcap trace (e.g., compression_link_l-3-0.pcap)
+# Input File: pcap trace (e.g., pcap/compression_link_l-3-0.pcap)
 # Output File: SYN packet log (e.g., multiSYN_output_loss_rate_l.txt)
 # Invoked by: simu_comp_multi_syn.sh
 # Example:
@@ -35,7 +35,7 @@ if len(sys.argv) > 2:
     print(count_rst)
 
 # Input and output file names
-input_pcap = f"compression_link_{entropy}-3-0.pcap"
+input_pcap = f"pcap/compression_link_{entropy}-3-0.pcap"
 output_txt = f"multiSYN_output_loss_rate_{entropy}.txt"
 
 # Set target port range (6000 - 7000)

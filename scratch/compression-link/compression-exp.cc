@@ -16,6 +16,7 @@
 #include "ns3/pcap-file.h"
 #include "ns3/ping-helper.h"
 #include "ns3/point-to-point-module.h"
+#include "ns3/system-path.h"
 #include "ns3/vector.h"
 
 #include <algorithm>
@@ -235,8 +236,9 @@ main(int argc, char* argv[])
     // std::string pcapFileName = "CompLinkCap_" + compLinkCapacity + + "_Entropy_" + entropyString;
 
     // p2p.EnablePcap(pcapFileName, s0p0_device.Get(0), true);
-    p2p.EnablePcapAll("compression_link_" + entropyString, true);
-    compHepler.EnablePcapAll("compressor_node_" + entropyString, true);
+    SystemPath::MakeDirectories("pcap");
+    p2p.EnablePcapAll("pcap/compression_link_" + entropyString, true);
+    compHepler.EnablePcapAll("pcap/compressor_node_" + entropyString, true);
 
     Simulator::Run();
     receiverHelper.GetReceiver()->Process(); // Output the results

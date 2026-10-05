@@ -89,21 +89,6 @@ done
 mkdir -p "$ns3_dir/scratch/compression-link"
 cp -- "$taracom_dir/scratch/compression-link/compression-exp.cc" \
     "$ns3_dir/scratch/compression-link/compression-exp.cc"
-cp -- "$taracom_dir/myconfig.txt" "$ns3_dir/myconfig.txt"
-mkdir -p "$ns3_dir/output"
-for file in \
-    simu_comp_link_capacity.sh \
-    simu_packet_number.sh \
-    simu_payload.sh \
-    simu_queue_size.sh \
-    simu_traffic_shaper.sh \
-    getDelay.py \
-    getSimuRes.py \
-    getSuperPacket.py \
-    countSpLossRate.py; do
-    cp -- "$taracom_dir/$file" "$ns3_dir/$file"
-done
-chmod +x "$ns3_dir"/simu_*.sh
 
 cmake -S "$ns3_dir" -B "$ns3_dir/cmake-cache" \
     -DCMAKE_BUILD_TYPE=Release \
@@ -119,3 +104,4 @@ cmake --build "$ns3_dir/cmake-cache" \
     --parallel "${TARACOM_BUILD_JOBS:-4}"
 
 echo "TaraCom compiled successfully in $ns3_dir/build."
+echo "Run sweeps from $taracom_dir with scripts/sweeps/<name>.sh; results land in results/<name>/."

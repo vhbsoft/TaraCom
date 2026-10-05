@@ -18,6 +18,7 @@
 # Called by: simu_comp_link_capacity.sh
 # =========================================
 
+import os
 import sys
 
 # Get the arguments from the command line
@@ -44,5 +45,6 @@ with open(args[1], 'a') as file:
     file.write('{},'.format(','.join(args[2:5])))
     file.write('{}\n'.format(val))
 
+os.makedirs('output', exist_ok=True)
 with open('./output/'+args[1]+'_output_{}'.format('_'.join(args[2:])), 'w') as outputfile:
     outputfile.write(content)
