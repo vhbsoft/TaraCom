@@ -7,3 +7,4 @@ UDP_payload_size:1100
 UDP_packet_number: 6000
 compression_link_capacity: 10Mbps
 output_file:compression_link_output
+compression_enabled: true

@@ -18,6 +18,7 @@
 #include "ns3/point-to-point-module.h"
 #include "ns3/vector.h"
 
+#include <algorithm>
 #include <cstdint>
 #include <fstream>
 #include <iostream>
@@ -44,6 +45,8 @@ struct CompConfig
     std::string compression_link_capacity;
 
     std::string output_file;
+
+    bool compression_enabled = true; // default keeps current behavior if the key is absent
 };
 
 std::string trim(const std::string& str);
@@ -128,7 +131,6 @@ main(int argc, char* argv[])
 
     double_t send_interval = 0.0000000001;
     std::string outerLinkCapacity = "10Mbps"; // default capacity of the outer link (non compression link)
-    bool enableCompression = true; // default value for compression
 
     // Read the config file
     CompConfig config;
@@ -137,6 +139,9 @@ main(int argc, char* argv[])
         std::cerr << "Error reading config file" << std::endl;
         return 1;
     }
+
+    bool enableCompression = config.compression_enabled;
+    std::cout << "Compression enabled: " << std::boolalpha << enableCompression << std::endl;
 
     //
     // CREATE THE NETWORK TOPOLOGY
@@ -318,6 +323,23 @@ readConfigFile(const std::string& filename, CompConfig& config)
         else if (key == "output_file")
         {
             config.output_file = value;
+        }
+        else if (key == "compression_enabled")
+        {
+            std::string lower = value;
+            std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+            if (lower == "true" || lower == "1" || lower == "yes" || lower == "on")
+            {
+                config.compression_enabled = true;
+            }
+            else if (lower == "false" || lower == "0" || lower == "no" || lower == "off")
+            {
+                config.compression_enabled = false;
+            }
+            else
+            {
+                std::cerr << "Invalid value for compression_enabled: " << value << std::endl;
+            }
         }
         else
         {
