@@ -35,7 +35,7 @@ cd ../ns-3.48-taracom
 ./ns3 run compression-exp -- --filename=../TaraCom/config/myconfig.txt --packetNumber=100 --compLinkCap=2Mbps --payload=1100 --entropy=l --queueSize=100
 ```
 
-`config/myconfig.txt` defines the UDP and TCP ports, the results filename and `compression_enabled` (`true` or `false`). Set `compression_enabled` to `false` to get an uncompressed baseline. The simulation writes packet reception times to `compression_link_output` and PCAP traces to `pcap/`, both in the directory where it runs.
+`config/myconfig.txt` defines the UDP and TCP ports, the results filename and `compression_enabled` (`true` or `false`). Its `compression_link_capacity`, `UDP_packet_number` and `UDP_payload_size` are used when `--compLinkCap`, `--packetNumber` or `--payload` is omitted. Payloads must be at least 16 bytes. Set `compression_enabled` to `false` to get an uncompressed baseline. The simulation writes packet reception times to `compression_link_output` and PCAP traces to `pcap/`, both in the directory where it runs.
 
 The five supported sweep scripts run from this repository:
 

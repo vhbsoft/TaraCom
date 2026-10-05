@@ -40,10 +40,10 @@ struct CompConfig
     int TCP_dest_port_tailSyn; // For standalone application, this is the destination port for the
                                // second TCP packet
     int TCP_dest_port_part1;
-    int UDP_payload_size;
-    int UDP_packet_number;
+    int UDP_payload_size = 1100;   // used when --payload is not given
+    int UDP_packet_number = 6000;  // used when --packetNumber is not given
 
-    std::string compression_link_capacity;
+    std::string compression_link_capacity; // used when --compLinkCap is not given
 
     std::string output_file;
 
@@ -81,8 +81,30 @@ main(int argc, char* argv[])
         return 0;
     }
 
+    // Read the config file
+    CompConfig config;
+    if (!readConfigFile(filename, config))
+    {
+        std::cerr << "Error reading config file" << std::endl;
+        return 1;
+    }
+
+    // Command-line values override the config file
+    if (compLinkCapacity.empty())
+    {
+        compLinkCapacity = config.compression_link_capacity;
+    }
+    if (compLinkCapacity.empty())
+    {
+        std::cerr << "No compression link capacity: pass --compLinkCap or set "
+                     "compression_link_capacity in the config file"
+                  << std::endl;
+        return 1;
+    }
+    std::cout << "Compression link capacity: " << compLinkCapacity << std::endl;
+
     // Set the packet number
-    int packet_number = 6000;
+    int packet_number = config.UDP_packet_number;
     if (!packetNumber.empty())
     {
         packet_number= std::stoi(packetNumber);
@@ -104,16 +126,19 @@ main(int argc, char* argv[])
         std::cout << "Invalid entropy value. Using default value of 'h'" << std::endl;
     }
 
-    // Set the payload size
-    int payloadSize = 1100;
+    // Set the payload size. The sender uses 12 bytes for the sequence/timestamp
+    // header and 4 for the app-layer length, so smaller payloads underflow.
+    const int minPayloadSize = 16;
+    int payloadSize = config.UDP_payload_size;
     if (!payloadString.empty())
     {
         payloadSize = std::stoi(payloadString);
-        if (payloadSize <= 0)
-        {
-            std::cerr << "Invalid payload size" << std::endl;
-            payloadSize = 1100;
-        }
+    }
+    if (payloadSize < minPayloadSize)
+    {
+        std::cerr << "Invalid payload size " << payloadSize << ": must be at least "
+                  << minPayloadSize << " bytes" << std::endl;
+        return 1;
     }
     std::cout << "Payload size: " << payloadSize << std::endl;
 
@@ -132,14 +157,6 @@ main(int argc, char* argv[])
 
     double_t send_interval = 0.0000000001;
     std::string outerLinkCapacity = "10Mbps"; // default capacity of the outer link (non compression link)
-
-    // Read the config file
-    CompConfig config;
-    if (!readConfigFile(filename, config))
-    {
-        std::cerr << "Error reading config file" << std::endl;
-        return 1;
-    }
 
     bool enableCompression = config.compression_enabled;
     std::cout << "Compression enabled: " << std::boolalpha << enableCompression << std::endl;
@@ -225,7 +242,17 @@ main(int argc, char* argv[])
     ApplicationContainer receiverApp = receiverHelper.Install(nodes.Get(3));
     receiverHelper.GetReceiver()->SetLogFileName(config.output_file);
     receiverApp.Start(Seconds(1.0));
-    receiverApp.Stop(Seconds(10.0));
+
+    // The sender enqueues the whole train almost instantly, so the receiver must
+    // keep listening until the train drains through the slowest link, or late
+    // packets are recorded as lost. Assume the worst case: no packet shrinks,
+    // with 64 bytes per packet for UDP/IP/PPP headers and zlib overhead.
+    uint64_t bottleneckBps = std::min(DataRate(outerLinkCapacity).GetBitRate(),
+                                      DataRate(compLinkCapacity).GetBitRate());
+    double drainSeconds =
+        double(packet_number) * (payloadSize + 64) * 8 / double(bottleneckBps);
+    double receiverStopSeconds = std::max(10.0, 1.0 + drainSeconds + 10.0);
+    receiverApp.Stop(Seconds(receiverStopSeconds));
 
     // Enable pcap
     // for variable packet number and entropy
